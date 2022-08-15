@@ -1,6 +1,6 @@
 {
     "codeception/codeception": {
-        "version": "4.2",
+        "version": "5.0",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",

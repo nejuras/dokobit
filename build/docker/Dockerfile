@@ -8,4 +8,6 @@ RUN apt update \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
+RUN mkdir -p /var/www/html/var/upload
+
 WORKDIR /var/www/html

@@ -19,3 +19,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    Dokobit\Service\FileUploader:
+        arguments:
+            $uploadDirectory: '%kernel.project_dir%/var/upload'
