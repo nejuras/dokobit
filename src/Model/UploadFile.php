@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Dokobit\Model;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 class UploadFile
 {
     public function __construct(
-        private readonly ?UploadedFile $file,
+        private readonly ?array $data,
     ) {
     }
 
-    public function getFile(): ?UploadedFile
+    public function getData(): ?array
     {
-        return $this->file;
+        return $this->data;
     }
 
 }

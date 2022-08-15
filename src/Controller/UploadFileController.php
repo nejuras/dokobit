@@ -17,7 +17,7 @@ class UploadFileController extends AbstractController
     use HandleTrait;
 
     public function __construct(
-        MessageBusInterface $messageBus,
+        MessageBusInterface $messageBus
     )
     {
         $this->messageBus = $messageBus;
@@ -25,9 +25,15 @@ class UploadFileController extends AbstractController
 
     public function upload(SerializerInterface $serializer, Request $request): Response
     {
-        $command = new UploadFile(null, $request->request->get('text'), $request->request->get('pulp'));
-        $r = $this->handle($command);
+        $data = [
+            'file' => $request->files->get('file'),
+            'ipAddress' => $request->getClientIp(),
+        ];
 
-        return new Response($serializer->serialize($r, 'json'), Response::HTTP_CREATED);
+        $command = new UploadFile($data);
+
+        $result = $this->handle($command);
+
+        return new Response($serializer->serialize($result, 'json'), Response::HTTP_CREATED);
     }
 }
