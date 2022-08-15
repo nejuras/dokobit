@@ -1,3 +1,4 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+files.upload:
+  path: /files/upload
+  methods: [ POST ]
+  controller: Dokobit\Controller\UploadFileController::upload
