@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dokobit\Controller;
 
 use Dokobit\Model\UploadFile;
+use Dokobit\Service\FileUploader;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,11 +17,15 @@ class UploadFileController extends AbstractController
 {
     use HandleTrait;
 
+    private FileUploader $fileUploader;
+
     public function __construct(
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
+        FileUploader $fileUploader,
     )
     {
         $this->messageBus = $messageBus;
+        $this->fileUploader = $fileUploader;
     }
 
     public function upload(SerializerInterface $serializer, Request $request): Response
@@ -31,6 +36,8 @@ class UploadFileController extends AbstractController
         ];
 
         $command = new UploadFile($data);
+
+        $this->fileUploader->upload($data['file']);
 
         $result = $this->handle($command);
 

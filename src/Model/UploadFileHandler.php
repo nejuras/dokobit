@@ -6,29 +6,27 @@ namespace Dokobit\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Dokobit\Entity\UploadFileStatistics;
-use Dokobit\Service\FileUploader;
-use Symfony\Component\HttpFoundation\Response;
+use Dokobit\Repository\UploadFileStatisticsRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class UploadFileHandler implements MessageHandlerInterface
 {
-    private FileUploader $fileUploader;
+    private UploadFileStatisticsRepository $uploadFileStatisticsRepository;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
-        FileUploader $fileUploader,
+        UploadFileStatisticsRepository $uploadFileStatisticsRepository,
         EntityManagerInterface $entityManager,
     ) {
-        $this->fileUploader = $fileUploader;
+        $this->uploadFileStatisticsRepository = $uploadFileStatisticsRepository;
         $this->entityManager = $entityManager;
     }
 
-    public function __invoke(UploadFile $command): int
+    public function __invoke(UploadFile $command): UploadFileStatistics
     {
         $values = $command->getData();
-        $this->fileUploader->upload($values['file']);
 
-        $fileStatistics = $this->entityManager->getRepository(UploadFileStatistics::class)->findOneBy(
+        $fileStatistics = $this->uploadFileStatisticsRepository->findOneBy(
             [
                 'ipAddress' => $values['ipAddress'],
             ]
@@ -37,14 +35,14 @@ class UploadFileHandler implements MessageHandlerInterface
         if ($fileStatistics) {
             $fileStatistics->setUsageCountPerDay($fileStatistics->getUsageCountPerDay() + 1);
         } else {
-            $newFileStatistics = (new UploadFileStatistics())
+            $fileStatistics = (new UploadFileStatistics())
                 ->setIpAddress($values['ipAddress'])
                 ->setUsageCountPerDay($values['usageCountPerDay'] ?? 1);
 
-            $this->entityManager->persist($newFileStatistics);
+            $this->entityManager->persist($fileStatistics);
         }
         $this->entityManager->flush();
 
-        return Response::HTTP_CREATED;
+        return $fileStatistics;
     }
 }
