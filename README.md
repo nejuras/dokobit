@@ -15,7 +15,7 @@
 - PhpMyAdmin Database client: http://localhost:8081
 - Project http://localhost:8080
 
-#### Run test (Codeception php testing framework)
+#### Run tests (PhpUnit)
 
 `php ./vendor/bin/phpunit --testdox
 
@@ -23,4 +23,4 @@
 1. To implement multiple archiving methods (zip, rar, 7z) I recommend
 to use Strategy Design Pattern. 
 It lets to decouple archiving methods into different classes and to avoid complex algorithms.
-To test different classes much .
+To test different classes much.
