@@ -10,12 +10,10 @@ use Dokobit\Entity\UploadFileStatistics;
 use Dokobit\Model\UploadFile;
 use Dokobit\Model\UploadFileHandler;
 use Dokobit\Repository\UploadFileStatisticsRepository;
-use PHPUnit\Util\Reflection;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use SebastianBergmann\ObjectReflector\ObjectReflector;
+use ReflectionException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Response;
 
 class UploadFileHandlerTest extends Unit
 {
@@ -41,7 +39,7 @@ class UploadFileHandlerTest extends Unit
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testShouldGetApiResponse(): void
     {
