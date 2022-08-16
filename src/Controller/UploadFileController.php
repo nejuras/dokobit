@@ -30,17 +30,20 @@ class UploadFileController extends AbstractController
 
     public function upload(SerializerInterface $serializer, Request $request): Response
     {
-        $data = [
-            'file' => $request->files->get('file'),
-            'ipAddress' => $request->getClientIp(),
-        ];
+        $data = $this->getRequestData($request);
 
-        $command = new UploadFile($data);
+        $this->fileUploader->upload($data['files']);
 
-        $this->fileUploader->upload($data['file']);
-
-        $result = $this->handle($command);
+        $result = $this->handle(new UploadFile($data));
 
         return new Response($serializer->serialize($result, 'json'), Response::HTTP_CREATED);
+    }
+
+    public function getRequestData(Request $request): array
+    {
+        return [
+            'files' => $request->files->get('files'),
+            'ipAddress' => $request->getClientIp(),
+        ];
     }
 }

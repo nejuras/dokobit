@@ -6,7 +6,6 @@ namespace Dokobit\Service;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader implements FileUploadInterface
 {
@@ -14,15 +13,17 @@ class FileUploader implements FileUploadInterface
     {
     }
 
-    public function upload(UploadedFile $file): void
+    public function upload($files): void
     {
-        $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = FileNameGenerator::generate($originalFileName) . '.' . $file->guessExtension();
+        foreach ($files as $file) {
+            $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileName = FileNameGenerator::generate($originalFileName) . '.' . $file->guessExtension();
 
-        try {
-            $file->move($this->getUploadDirectory(), $fileName);
-        } catch (FileException $e) {
-            throw new FileNotFoundException($e->getMessage());
+            try {
+                $file->move($this->getUploadDirectory(), $fileName);
+            } catch (FileException $e) {
+                throw new FileNotFoundException($e->getMessage());
+            }
         }
     }
 
