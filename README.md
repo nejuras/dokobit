@@ -19,6 +19,9 @@
 
 `php ./vendor/bin/phpunit --testdox
 
+### Postman
+![Screenshot](docs/postman.png)
+
 ### Thoughts
 1. To implement multiple archiving methods (zip, rar, 7z) I recommend
 to use Strategy Design Pattern. 
