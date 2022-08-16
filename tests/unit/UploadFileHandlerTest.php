@@ -25,15 +25,15 @@ class UploadFileHandlerTest extends Unit
 
     private EntityManagerInterface|ObjectProphecy $entityManager;
 
-    private UploadFileStatisticsRepository|ObjectProphecy $repo;
+    private UploadFileStatisticsRepository|ObjectProphecy $uploadFileStatisticsRepository;
 
     protected function setUp(): void
     {
         $this->entityManager = $this->prophesize(EntityManagerInterface::class);
-        $this->repo = $this->prophesize(UploadFileStatisticsRepository::class);
+        $this->uploadFileStatisticsRepository = $this->prophesize(UploadFileStatisticsRepository::class);
 
         $this->uploadFileHandler = new UploadFileHandler(
-            $this->repo->reveal(),
+            $this->uploadFileStatisticsRepository->reveal(),
             $this->entityManager->reveal(),
         );
     }
@@ -56,7 +56,7 @@ class UploadFileHandlerTest extends Unit
             ->getProperty('id')
             ->setValue($uploadFileStatistics,2);
 
-        $this->repo->findOneBy(
+        $this->uploadFileStatisticsRepository->findOneBy(
             [
                 'ipAddress' => self::IP_ADDRESS,
             ]
@@ -73,8 +73,7 @@ class UploadFileHandlerTest extends Unit
 
     protected function getUploadedFile(): UploadedFile
     {
-        return new UploadedFile($this->getUploadedFileUrl(), 'files', 'csv')
-            ;
+        return new UploadedFile($this->getUploadedFileUrl(), 'files', 'csv');
     }
 
     protected function getUploadedFileUrl(): string
