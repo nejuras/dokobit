@@ -8,6 +8,7 @@ use Dokobit\Model\UploadFile;
 use Dokobit\Service\FileUploader;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
@@ -22,8 +23,7 @@ class UploadFileController extends AbstractController
     public function __construct(
         MessageBusInterface $messageBus,
         FileUploader $fileUploader,
-    )
-    {
+    ) {
         $this->messageBus = $messageBus;
         $this->fileUploader = $fileUploader;
     }
@@ -31,6 +31,10 @@ class UploadFileController extends AbstractController
     public function upload(SerializerInterface $serializer, Request $request): Response
     {
         $data = $this->getRequestData($request);
+
+        if (empty($data['files'])) {
+            throw new Exception('File not found');
+        }
 
         $this->fileUploader->upload($data['files']);
 
