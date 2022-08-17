@@ -17,7 +17,7 @@
 
 #### Run tests (PhpUnit)
 
-`php ./vendor/bin/phpunit --testdox
+`php ./vendor/bin/phpunit --testdox`
 
 ### Postman
 ![Screenshot](docs/postman.png)
